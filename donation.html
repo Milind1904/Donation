@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Make a Donation</h2>
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-4">
+                            {{ form.type.label(class="form-label") }}
+                            {% if form.type.errors %}
+                                {{ form.type(class="form-select is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.type.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.type(class="form-select") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4" id="monetary-section">
+                            {{ form.amount.label(class="form-label") }}
+                            {% if form.amount.errors %}
+                                {{ form.amount(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.amount.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.amount(class="form-control") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4" id="goods-section" style="display: none;">
+                            {{ form.items.label(class="form-label") }}
+                            {% if form.items.errors %}
+                                {{ form.items(class="form-control is-invalid", rows="4") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.items.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.items(class="form-control", rows="4") }}
+                            {% endif %}
+                            <small class="form-text text-muted">Please describe the items you wish to donate</small>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.ngo.label(class="form-label") }}
+                            {% if form.ngo.errors %}
+                                {{ form.ngo(class="form-select is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.ngo.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.ngo(class="form-select") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const donationType = document.getElementById('type');
+    const monetarySection = document.getElementById('monetary-section');
+    const goodsSection = document.getElementById('goods-section');
+
+    function updateFormSections() {
+        if (donationType.value === 'monetary') {
+            monetarySection.style.display = 'block';
+            goodsSection.style.display = 'none';
+        } else {
+            monetarySection.style.display = 'none';
+            goodsSection.style.display = 'block';
+        }
+    }
+
+    donationType.addEventListener('change', updateFormSections);
+    updateFormSections(); // Initial state
+});
+</script>
+{% endblock %} 
